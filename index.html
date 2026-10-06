@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MUDE — Games for less</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&family=Archivo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#ece6d8;--ink:#141412;--acc:#ff4b1f;--lime:#c8f03c;--card:#f7f2e6;--mut:#6d675a}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10100e;--ink:#f1ecdf;--card:#1a1a17;--mut:#9a9486}}
+:root[data-theme="dark"]{--bg:#10100e;--ink:#f1ecdf;--card:#1a1a17;--mut:#9a9486}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Archivo,system-ui,sans-serif;overflow-x:hidden}
+.mono{font-family:"Space Mono",ui-monospace,monospace}
+.dis{font-family:Anton,Impact,"Arial Narrow",sans-serif;text-transform:uppercase;font-weight:400}
+body:after{content:"";position:fixed;inset:-100%;pointer-events:none;z-index:90;opacity:.07;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain .6s steps(4) infinite}
+@keyframes grain{25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-2%)}}
+#bar{position:fixed;top:0;left:0;height:5px;width:0;background:var(--acc);z-index:100}
+#pre{position:fixed;inset:0;background:var(--ink);color:var(--bg);z-index:200;display:flex;align-items:flex-end;justify-content:space-between;padding:4vw;transition:transform .9s cubic-bezier(.8,0,.2,1)}
+#pre.go{transform:translateY(-100%)}#pre b{font-size:clamp(80px,22vw,260px);line-height:.8}
+#cur{position:fixed;width:18px;height:18px;border-radius:50%;background:var(--acc);pointer-events:none;z-index:150;mix-blend-mode:difference;transform:translate(-50%,-50%);transition:width .25s,height .25s;display:none}
+#cur.big{width:70px;height:70px}
+@media(hover:hover){#cur{display:block}}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;display:flex;justify-content:space-between;align-items:center;padding:14px 4vw;background:var(--bg);border-bottom:2px solid var(--ink)}
+.logo{font-size:34px;letter-spacing:1px;transition:.3s}.logo:hover{transform:skewX(-12deg);color:var(--acc)}
+nav{display:flex;gap:14px;align-items:center}
+.pill{background:var(--ink);color:var(--bg);border:0;padding:11px 20px;font:700 13px "Space Mono",monospace;cursor:pointer;position:relative;overflow:hidden;text-transform:uppercase}
+.pill:before,.buy:before{content:"";position:absolute;inset:0;background:var(--acc);transform:translateY(101%);transition:transform .35s}
+.pill:hover:before,.buy:hover:before{transform:none}.pill span,.buy span{position:relative}
+.pill.b{animation:bump .5s}@keyframes bump{40%{transform:scale(1.2) rotate(-3deg)}}
+.hero{position:relative;padding:8vh 4vw 6vh;border-bottom:2px solid var(--ink);overflow:hidden}
+.hero h1{font-size:clamp(64px,15.5vw,230px);line-height:.88}
+.hero h1 .w{display:block;overflow:hidden}
+.hero h1 .l{display:inline-block;transform:translateY(110%) rotate(8deg);transition:transform .9s cubic-bezier(.2,1,.3,1);transition-delay:calc(var(--i)*45ms)}
+body.rdy .l{transform:none}
+.hero h1 .o{-webkit-text-stroke:2px var(--ink);color:transparent}
+.sub{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;margin-top:34px;align-items:flex-end}
+.sub p{max-width:420px;font-size:18px;line-height:1.5;opacity:0;transform:translateY(30px);transition:1s 1.2s}
+body.rdy .sub p{opacity:1;transform:none}
+.stick{width:170px;height:170px;position:relative;animation:spin 14s linear infinite;flex:none}
+.stick svg{width:100%;height:100%}.stick .c{position:absolute;inset:0;display:grid;place-items:center;font-size:44px;color:var(--ink);animation:spin 14s linear infinite reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.shape{position:absolute;pointer-events:none;transition:transform .2s}
+.s1{width:120px;height:120px;border-radius:50%;background:var(--lime);right:9%;top:10%;animation:fl 6s ease-in-out infinite}
+.s2{width:0;height:0;border:50px solid transparent;border-bottom:90px solid var(--acc);right:26%;top:48%;animation:fl 7s -2s ease-in-out infinite}
+.s3{width:80px;height:80px;border:6px solid var(--ink);right:4%;top:55%;animation:spin 9s linear infinite}
+@keyframes fl{50%{translate:0 -30px}}
+.mq{overflow:hidden;white-space:nowrap;border-bottom:2px solid var(--ink);background:var(--lime);color:#141412;padding:12px 0}
+.mq.d{background:var(--ink);color:var(--bg)}
+.mq div{display:inline-block;animation:mq 45s linear infinite;font-size:26px}.mq.d div{animation-direction:reverse;animation-duration:60s}
+.mq:hover div{animation-play-state:paused}@keyframes mq{to{transform:translateX(-50%)}}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:2px solid var(--ink)}
+.stats div{padding:30px 4vw;border-right:2px solid var(--ink);transition:.4s}.stats div:last-child{border:0}
+.stats div:hover{background:var(--acc);color:#141412}
+.stats b{font-size:clamp(40px,8vw,100px);display:block;line-height:1}.stats small{font-size:12px;text-transform:uppercase}
+.tools{display:flex;gap:0;flex-wrap:wrap;border-bottom:2px solid var(--ink);position:sticky;top:calc(66px + env(safe-area-inset-top,0px));z-index:30;background:var(--bg)}
+.tools input,.tools select{background:transparent;color:var(--ink);border:0;border-right:2px solid var(--ink);padding:18px 4vw;font:700 14px "Space Mono",monospace;outline:0;text-transform:uppercase;transition:.3s}
+.tools input{flex:1;min-width:180px}.tools input:focus,.tools select:focus{background:var(--lime);color:#141412}
+.tools select option{background:var(--card);color:var(--ink)}
+.ttl{padding:60px 4vw 10px;font-size:clamp(40px,9vw,120px);line-height:.9;clip-path:inset(0 100% 0 0);transition:clip-path 1s cubic-bezier(.7,0,.2,1)}
+.ttl.in{clip-path:inset(0)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:28px;padding:30px 4vw 90px;perspective:1100px}
+.card{background:var(--card);border:2px solid var(--ink);box-shadow:7px 7px 0 var(--ink);opacity:0;transform:translateY(70px) rotate(2deg);transition:opacity .6s,transform .7s cubic-bezier(.2,1,.3,1),box-shadow .3s;position:relative;transform-style:preserve-3d}
+.card.in{opacity:1;transform:none}
+.card.t{transition:opacity .6s,box-shadow .3s}
+.card:hover{box-shadow:12px 12px 0 var(--acc)}
+.cover{height:170px;border-bottom:2px solid var(--ink);position:relative;overflow:hidden;background-size:40px 40px;transition:background-position 1.2s}
+.card:hover .cover{background-position:80px 80px}
+.cover:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),#fff8,transparent 55%);opacity:0;transition:.3s}.card:hover .cover:after{opacity:1}
+.cover h4{position:absolute;left:12px;bottom:8px;right:12px;font-size:30px;line-height:.95;color:#141412;transition:transform .5s cubic-bezier(.2,1,.3,1)}
+.card:hover .cover h4{transform:translateY(-6px) scale(1.04);transform-origin:left}
+.tag{position:absolute;top:10px;right:10px;background:#141412;color:var(--lime);font-size:12px;padding:4px 8px;transform:rotate(4deg);z-index:2;animation:wob 2.4s ease-in-out infinite}
+@keyframes wob{50%{transform:rotate(-4deg) scale(1.1)}}
+.info{padding:14px 16px 18px}.info small{color:var(--mut);text-transform:uppercase;font-size:11px}
+.pr{display:flex;align-items:baseline;gap:10px;margin:8px 0 14px}.pr b{font-size:30px;font-family:Anton,Impact,sans-serif;font-weight:400}.pr s{color:var(--mut);font-size:14px}
+.buy{width:100%;border:2px solid var(--ink);background:var(--ink);color:var(--bg);padding:13px;font:700 14px "Space Mono",monospace;text-transform:uppercase;cursor:pointer;position:relative;overflow:hidden;transition:transform .15s}
+.buy:active{scale:.96}
+.fly{position:fixed;width:22px;height:22px;background:var(--acc);border:2px solid var(--ink);z-index:120;pointer-events:none}
+.ov{position:fixed;inset:0;background:#000a;z-index:110;display:none;justify-content:flex-end}
+.ov.on{display:flex;animation:fd .3s}@keyframes fd{from{opacity:0}}
+.md{background:var(--bg);width:100%;max-width:470px;height:100%;overflow:auto;padding:28px;border-left:2px solid var(--ink);animation:sl .5s cubic-bezier(.2,1,.3,1)}
+@keyframes sl{from{transform:translateX(100%)}}
+.md h2{font-size:44px;margin-bottom:18px}.x{float:right;background:none;border:2px solid var(--ink);color:var(--ink);width:40px;height:40px;font-size:20px;cursor:pointer;transition:.4s}.x:hover{transform:rotate(180deg);background:var(--acc)}
+.row{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:2px dashed var(--mut);animation:up .5s both;align-items:center}
+@keyframes up{from{opacity:0;transform:translateY(20px)}}
+.row button{background:none;border:0;color:var(--acc);cursor:pointer;font:700 12px "Space Mono"}
+.tot{display:flex;justify-content:space-between;font-size:36px;margin:20px 0}
+.f{margin-bottom:12px}.f label{font-size:11px;text-transform:uppercase;display:block;margin-bottom:4px;color:var(--mut)}
+.f input{width:100%;background:var(--card);color:var(--ink);border:2px solid var(--ink);padding:13px;font:700 16px "Space Mono",monospace;outline:0;transition:.2s}
+.f input:focus{box-shadow:5px 5px 0 var(--lime);transform:translate(-2px,-2px)}.f input.bad{border-color:var(--acc);animation:sh .4s}
+@keyframes sh{25%{translate:-7px}75%{translate:7px}}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cc{height:175px;background:var(--acc);color:#141412;border:2px solid var(--ink);box-shadow:6px 6px 0 var(--ink);padding:16px;margin-bottom:22px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.cc:after{content:"";position:absolute;width:200px;height:200px;border-radius:50%;background:var(--lime);right:-60px;top:-70px;animation:fl 5s infinite}
+.cc .n{font-size:21px;letter-spacing:2px;position:relative;z-index:1}.cc div{position:relative;z-index:1}
+.note{font-size:11px;color:var(--mut);margin-top:12px;text-align:center}
+.spin{width:60px;height:60px;border:6px solid var(--mut);border-top-color:var(--acc);border-radius:50%;animation:spin .7s linear infinite;margin:40px auto}
+.ok{text-align:center;padding-top:40px}.ok .ch{font-size:130px;animation:pop .8s cubic-bezier(.2,1.8,.4,1);color:var(--acc)}@keyframes pop{from{scale:0;rotate:-90deg}}
+.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;translate:-50% 200px;background:var(--lime);color:#141412;border:2px solid #141412;box-shadow:5px 5px 0 #141412;padding:12px 20px;z-index:130;transition:translate .5s cubic-bezier(.2,1.6,.4,1)}
+.toast.on{translate:-50% 0}
+footer{padding:60px 4vw;font-size:clamp(50px,13vw,200px);line-height:.85;border-top:2px solid var(--ink)}
+footer p{font:12px "Space Mono";margin-top:20px;color:var(--mut)}
+canvas{position:fixed;inset:0;pointer-events:none;z-index:140}
+</style></head><body>
+<div id="bar"></div><div id="cur"></div>
+<div id="pre" class="dis"><span class="mono">Loading games</span><b id="pn">0</b></div>
+<header><div class="logo dis">Mude</div><nav><span class="mono" style="font-size:12px">80% PRICE ALWAYS</span><button class="pill" id="cb"><span>Cart (<i id="cn" style="font-style:normal">0</i>)</span></button></nav></header>
+<section class="hero" id="hero">
+<div class="shape s1" data-p="30"></div><div class="shape s2" data-p="-20"></div><div class="shape s3" data-p="45"></div>
+<h1 class="dis" id="h1"><span class="w">Games</span><span class="w o">for less.</span></h1>
+<div class="sub"><p>Every game in our catalog costs exactly 80% of its full price. No sales to wait for, no coupons to hunt. Just pay less and play more.</p>
+<div class="stick"><svg viewBox="0 0 200 200"><defs><path id="ci" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/></defs><circle cx="100" cy="100" r="98" fill="#c8f03c" stroke="#141412" stroke-width="3"/><text font-family="Space Mono,monospace" font-weight="700" font-size="15" fill="#141412"><textPath href="#ci">PAY 80% • PLAY 100% • PAY 80% • PLAY 100% •</textPath></text></svg><div class="c dis">-20%</div></div></div>
+</section>
+<div class="mq dis"><div id="m1"></div></div>
+<div class="stats dis"><div><b data-n="44">0</b><small class="mono">Games</small></div><div><b data-n="20" data-s="%">0</b><small class="mono">Saved on every game</small></div><div><b data-n="12480">0</b><small class="mono">Happy players</small></div></div>
+<div class="tools"><input id="q" placeholder="Search games..."><select id="g"><option value="">All genres</option></select><select id="s" style="border:0"><option value="">Sort</option><option value="a">Price: low to high</option><option value="d">Price: high to low</option></select></div>
+<h2 class="ttl dis">The catalog</h2>
+<div class="grid" id="grid"></div>
+<div class="mq d dis"><div id="m2"></div></div>
+<footer class="dis">Pay 80%.<br>Play 100%.<p>© 2026 MUDE — GAMES FOR LESS</p></footer>
+<div class="ov" id="ov"><div class="md" id="md"></div></div><div class="toast mono" id="t"></div><canvas id="cv"></canvas>
+<script>
+const D="Cyberpunk 2077|1699|RPG;S.T.A.L.K.E.R. 2|2099|Shooter;Red Dead Redemption 2|1999|Action;The Witcher 3|679|RPG;Elden Ring|1799|RPG;Baldur's Gate 3|1999|RPG;GTA V|899|Action;Hogwarts Legacy|1999|RPG;God of War|1599|Action;Hades II|599|Roguelike;Hollow Knight|369|Metroidvania;Stardew Valley|329|Simulation;Minecraft|999|Sandbox;Terraria|199|Sandbox;Resident Evil 4|1899|Horror;Resident Evil Village|1299|Horror;Dark Souls III|1299|RPG;Sekiro|1999|Action;Death Stranding|1299|Action;Horizon Zero Dawn|1299|Action;Spider-Man Remastered|1999|Action;Mafia: Definitive|1099|Action;Metro Exodus|799|Shooter;DOOM Eternal|1099|Shooter;Far Cry 6|1499|Shooter;Assassin's Creed Valhalla|1799|Action;Fallout 4|599|RPG;Skyrim SE|899|RPG;Starfield|2199|RPG;Dying Light 2|1499|Action;Sea of Thieves|899|Adventure;It Takes Two|799|Co-op;Cuphead|399|Platformer;Hades|449|Roguelike;Left 4 Dead 2|249|Shooter;Portal 2|249|Puzzle;Cities: Skylines II|1599|Strategy;Civilization VI|1299|Strategy;Total War: Warhammer III|1799|Strategy;Forza Horizon 5|1799|Racing;Need for Speed Unbound|1699|Racing;Lethal Company|229|Horror;Palworld|699|Survival;Black Myth: Wukong|1699|Action;Silent Hill 2|2299|Horror;Sons of the Forest|499|Survival".split(";").map((s,i)=>{const[n,p,g]=s.split("|");return{id:i,n,p:+p,g}});
+const COL=[["#ff4b1f","#141412"],["#c8f03c","#141412"],["#4f7cff","#f1ecdf"],["#ffc2d6","#141412"],["#ffd23f","#141412"],["#2ec4a6","#141412"]];
+const PAT=[(a,b)=>`repeating-linear-gradient(45deg,${a} 0 20px,${b}22 20px 40px)`,(a,b)=>`radial-gradient(${b}33 28%,${a} 30%)`,(a,b)=>`repeating-conic-gradient(${a} 0 25%,${b}1a 0 50%)`,(a,b)=>`repeating-linear-gradient(0deg,${a} 0 14px,${b}25 14px 18px)`,(a,b)=>`radial-gradient(circle at 30% 30%,${b}40 0 18%,transparent 19%),${a}`];
+const f=n=>Math.round(n).toLocaleString("en-US")+" UAH",$=id=>document.getElementById(id);let cart=[];
+function render(){const q=$("q").value.toLowerCase(),g=$("g").value,s=$("s").value;let l=D.filter(x=>x.n.toLowerCase().includes(q)&&(!g||x.g==g));if(s)l.sort((a,b)=>s=="a"?a.p-b.p:b.p-a.p);
+$("grid").innerHTML=l.map((x,i)=>{const[a,b]=COL[x.id%6];return`<div class="card" data-d="${i%5}"><div class="cover" style="background:${PAT[x.id%5](a,b)};background-color:${a};color:${b}"><span class="tag mono">-20%</span><h4 class="dis" style="color:${b}">${x.n}</h4></div><div class="info"><small class="mono">${x.g}</small><div class="pr"><b data-v="${x.p*.8}">${f(x.p*.8)}</b><s class="mono">${f(x.p)}</s></div><button class="buy" onclick="add(${x.id},this)"><span>Buy now</span></button></div></div>`}).join("")||"<p class='mono' style='padding:20px'>Nothing found.</p>";
+document.querySelectorAll(".card").forEach(c=>{io.observe(c);c.onmousemove=e=>{const r=c.getBoundingClientRect(),px=(e.clientX-r.left)/r.width,py=(e.clientY-r.top)/r.height;c.classList.add("t");c.style.transform=`rotateY(${(px-.5)*14}deg) rotateX(${(.5-py)*14}deg) translateZ(10px)`;const cv=c.firstChild;cv.style.setProperty("--mx",px*100+"%");cv.style.setProperty("--my",py*100/1.5+"%")};c.onmouseleave=()=>{c.style.transform="";setTimeout(()=>c.classList.remove("t"),300)}});
+document.querySelectorAll(".buy,.pill").forEach(mag)}
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){const el=x.target;setTimeout(()=>{el.classList.add("in");const b=el.querySelector("[data-v]");if(b){const v=+b.dataset.v;let t=0;const iv=setInterval(()=>{t+=v/20;if(t>=v){t=v;clearInterval(iv)}b.textContent=f(t)},25)}},(el.dataset.d||0)*80);io.unobserve(el)}}),{threshold:.1});
+document.querySelectorAll(".ttl").forEach(t=>io.observe(t));
+function mag(b){b.onmousemove=e=>{const r=b.getBoundingClientRect();b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.15}px,${(e.clientY-r.top-r.height/2)*.3}px)`};b.onmouseleave=()=>b.style.transform=""}
+[...new Set(D.map(x=>x.g))].forEach(g=>$("g").add(new Option(g,g)));$("q").oninput=$("g").onchange=$("s").onchange=render;
+render();$("m1").innerHTML=(D.map(x=>x.n).join(" / ")+" / ").repeat(2);$("m2").innerHTML=("PAY 80% / PLAY 100% / ").repeat(14);
+$("h1").querySelectorAll(".w").forEach(w=>{let i=0;w.innerHTML=[...w.textContent].map(c=>`<span class="l" style="--i:${i++}">${c==" "?"&nbsp;":c}</span>`).join("")});
+let n=0;const pi=setInterval(()=>{n+=Math.ceil(Math.random()*9);if(n>=100){n=100;clearInterval(pi);setTimeout(()=>{$("pre").classList.add("go");document.body.classList.add("rdy")},250)}$("pn").textContent=n},60);
+const co=new IntersectionObserver(e=>e.forEach(en=>{if(en.isIntersecting){const el=en.target,t0=+el.dataset.n;let t=0;const iv=setInterval(()=>{t+=t0/50;if(t>=t0){t=t0;clearInterval(iv)}el.textContent=Math.round(t).toLocaleString("en-US")+(el.dataset.s||"")},30);co.unobserve(el)}}));document.querySelectorAll("[data-n]").forEach(d=>co.observe(d));
+onscroll=()=>{$("bar").style.width=scrollY/(document.body.scrollHeight-innerHeight)*100+"%"};
+const cur=$("cur");onmousemove=e=>{cur.style.left=e.clientX+"px";cur.style.top=e.clientY+"px";cur.classList.toggle("big",!!e.target.closest("button,.card,select,input"));const hx=(e.clientX/innerWidth-.5),hy=(e.clientY/innerHeight-.5);document.querySelectorAll(".shape").forEach(s=>s.style.transform=`translate(${hx*s.dataset.p*2}px,${hy*s.dataset.p*2}px)`)};
+function toast(m){$("t").textContent=m;$("t").classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>$("t").classList.remove("on"),2000)}
+function upd(){$("cn").textContent=cart.length;$("cb").classList.remove("b");void $("cb").offsetWidth;$("cb").classList.add("b")}
+function add(id,btn){if(cart.includes(id)){toast("Already in cart");return}const r=btn.getBoundingClientRect(),c=$("cb").getBoundingClientRect(),d=document.createElement("div");d.className="fly";d.style.left=r.left+r.width/2+"px";d.style.top=r.top+"px";document.body.appendChild(d);
+d.animate([{transform:"scale(1) rotate(0)"},{transform:`translate(${c.left-r.left-r.width/2+30}px,${c.top-r.top}px) scale(.4) rotate(540deg)`}],{duration:700,easing:"cubic-bezier(.6,-.3,.4,1)"}).onfinish=()=>{d.remove();cart.push(id);upd();toast(D[id].n+" added");openCart()}}
+const total=()=>cart.reduce((s,i)=>s+D[i].p*.8,0);
+function show(h){$("md").innerHTML=h;$("ov").classList.add("on")}function close(){$("ov").classList.remove("on")}
+$("ov").onclick=e=>{if(e.target.id=="ov")close()};$("cb").onclick=openCart;
+function rm(i){cart=cart.filter(x=>x!=i);upd();openCart()}
+function openCart(){const X=`<button class="x" onclick="close()">×</button><h2 class="dis">Your cart</h2>`;if(!cart.length){show(X+`<p class="mono">Your cart is empty.</p>`);return}
+show(X+cart.map((i,k)=>`<div class="row" style="animation-delay:${k*70}ms"><span>${D[i].n}</span><span class="mono">${f(D[i].p*.8)} <button onclick="rm(${i})">REMOVE</button></span></div>`).join("")+`<div class="tot dis"><span>Total</span><span>${f(total())}</span></div><button class="buy" onclick="pay()"><span>Checkout</span></button>`)}
+function pay(){show(`<button class="x" onclick="close()">×</button><h2 class="dis">Payment</h2><div class="cc mono"><div class="dis" style="font-size:24px">MUDE PAY</div><div class="n" id="pn2">•••• •••• •••• ••••</div><div style="display:flex;justify-content:space-between"><span id="pm">FULL NAME</span><span id="pe">MM/YY</span></div></div>
+<div class="f"><label>Email (we send your key here)</label><input id="em" type="email" placeholder="you@mail.com"></div><div class="f"><label>Name on card</label><input id="nm" placeholder="JOHN SMITH"></div>
+<div class="f"><label>Card number</label><input id="cn2" inputmode="numeric" maxlength="19" placeholder="0000 0000 0000 0000"></div>
+<div class="two"><div class="f"><label>Expiry</label><input id="ex" maxlength="5" placeholder="MM/YY"></div><div class="f"><label>CVV</label><input id="cv2" type="password" inputmode="numeric" maxlength="3" placeholder="•••"></div></div>
+<div class="tot dis"><span>Pay</span><span>${f(total())}</span></div><button class="buy" onclick="go()"><span>Pay ${f(total())}</span></button><div class="note mono">Demo checkout: no real money is charged</div>`);
+$("cn2").oninput=e=>{let v=e.target.value.replace(/\D/g,"").slice(0,16).replace(/(.{4})/g,"$1 ").trim();e.target.value=v;$("pn2").textContent=v||"•••• •••• •••• ••••"};
+$("ex").oninput=e=>{let v=e.target.value.replace(/\D/g,"").slice(0,4);if(v.length>2)v=v.slice(0,2)+"/"+v.slice(2);e.target.value=v;$("pe").textContent=v||"MM/YY"};$("nm").oninput=e=>$("pm").textContent=e.target.value.toUpperCase()||"FULL NAME";document.querySelectorAll(".buy").forEach(mag)}
+function luhn(s){let r=0,a=0;for(let i=s.length-1;i>=0;i--){let d=+s[i];if(a){d*=2;if(d>9)d-=9}r+=d;a=!a}return r%10==0}
+function go(){const c=$("cn2").value.replace(/\s/g,""),ex=$("ex").value,m=+ex.slice(0,2);const chk={em:/^\S+@\S+\.\S+$/.test($("em").value),nm:$("nm").value.trim().length>2,cn2:c.length==16&&luhn(c),ex:/^\d\d\/\d\d$/.test(ex)&&m>=1&&m<=12,cv2:/^\d{3}$/.test($("cv2").value)};let ok=true;
+for(const k in chk){const el=$(k);el.classList.remove("bad");if(!chk[k]){void el.offsetWidth;el.classList.add("bad");ok=false}}if(!ok){toast("Check your card details");return}
+const sum=total(),em=$("em").value;show(`<div class="spin"></div><p class="mono" style="text-align:center">Processing payment...</p>`);
+setTimeout(()=>{const o="MUDE-"+Math.random().toString(36).slice(2,8).toUpperCase();show(`<div class="ok"><div class="ch dis">✓</div><h2 class="dis">Payment successful</h2><p class="mono" style="margin:14px 0 24px;line-height:1.6">Order ${o}<br>${f(sum)}<br>Keys sent to ${em}</p><button class="buy" onclick="close()"><span>Back to store</span></button></div>`);cart=[];$("cn").textContent=0;boom()},2200)}
+const cv=$("cv"),x=cv.getContext("2d");let C=[];function rs(){cv.width=innerWidth;cv.height=innerHeight}rs();onresize=rs;
+function boom(){for(let i=0;i<180;i++)C.push({x:innerWidth*.7,y:innerHeight*.5,vx:(Math.random()-.8)*18,vy:Math.random()*-16-2,c:COL[i%6][0],l:130,r:Math.random()*6})}
+(function lp(){x.clearRect(0,0,cv.width,cv.height);C=C.filter(c=>c.l-->0);C.forEach(c=>{c.x+=c.vx;c.y+=c.vy;c.vy+=.45;c.r+=.2;x.save();x.translate(c.x,c.y);x.rotate(c.r);x.fillStyle=c.c;x.fillRect(-5,-3,10,6);x.restore()});requestAnimationFrame(lp)})();
+</script></body></html>
